@@ -9,7 +9,7 @@ DOCUMENTS and DEMO
 LICENSE
 =========
 This software is released under the MIT License, see the following URL.
-https://github.com/Isotake/opus_tagarea/blob/master/LICENSE.md
+<a href="https://github.com/Isotake/opus_tagarea/blob/master/LICENCE.md">https://github.com/Isotake/opus_tagarea/blob/master/LICENCE.md</a>
 
 
 
