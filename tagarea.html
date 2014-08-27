@@ -1,0 +1,524 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Language" content="ja">
+	<meta name="viewport" content="width=1024">
+	<title>tagarea</title>
+	<style type="text/css">
+		html, body, div{
+			margin:0;
+			padding:0;
+		}
+		div {
+			-webkit-box-sizing: border-box;
+		}
+		html{
+			width: 100%;
+		}
+		body{
+			width: 100%;
+			font: 16px/24px Meiryo,'Hiragino Kaku Gothic Pro','MS PGothic',Arial,Verdana,Sans-Serif;
+			background-image: url(./images/cross_white_01.png);
+		}
+
+		#container {
+			margin: 100px auto;
+			width: 1000px;
+		}
+		.board {
+			width: 100%;
+			margin: 20px 0px;
+			padding: 0px 40px 40px 40px;
+			background: #fff;
+			border: solid 2px #000;
+		}
+		.header {
+			padding-top: 40px;
+			font-size: 48px;
+			font-weight: bold;
+		}
+		.digest {
+			display: -webkit-box;
+			-webkit-box-pack: center;
+		}
+		.digest_area {
+			width: 33%;
+		}
+		.digest_area li {
+			list-style-type: none;
+			position: relative;
+			line-height: 32px;
+		}
+		.contents {
+			display: -webkit-box;
+			-webkit-box-align: center;
+			-webkit-box-pack: center;
+		}
+		.block{
+			margin: 20px;
+			width: 418px;
+			height: 480px;
+			background-color: #000;
+		}
+		.tagareabox {
+			width: 100%;
+			background-color: #000;
+		}
+		.tagbox {
+			width: 100%;
+			height: 220px;
+		}
+		.taginput {
+			margin: 0px;
+			padding: 0px;
+			width: 100%;
+			height: 40px;
+			border: solid 0px transparent;
+			background: #fff;
+			outline: 0px;
+		}
+		.tag {
+			display: block;
+			float: left;
+			margin: 3px;
+			padding: 4px 8px;
+			border-radius: 20px;
+			font-size: 12px;
+			color: #000;
+			background-color: #fff;
+		}
+		.cancel_tag {
+			color: #000;
+		}
+		.taglistbox {
+			height: 220px;
+			background-color: #fff;
+		}
+		.taglistbox .tag {
+			color: #fff;
+			background-color: #000;
+		}
+
+		.documents {
+		}
+
+		.footer {
+			padding: 20px 40px;
+			text-align: right;
+		}
+
+/* fontello */
+		@font-face {
+			font-family: 'fontello';
+			src: url('./font/fontello_0627.eot');
+			src: url('./font/fontello_0627.eot?#iefix') format('embeded-opentype'),
+				 url('./font/fontello_0627.woff') format('woff'),
+				 url('./font/fontello_0627.ttf') format('truetype'),
+				 url('./font/fontello_0627.svg#fontello') format('svg');
+		}
+		.digest_area li:before {
+			font-family: 'fontello';
+			font-style: normal;
+			font-weight: normal;
+			speak: none;
+			display: inline-block;
+			content: 'b';
+			font-size: 24px;
+			line-height: 24px;
+			position: absolute;
+			top: 4px;
+			left: -32px;
+		}
+
+/* social button */
+		.fb_iframe_widget {
+			margin-left: -30px;
+			line-height: 10px;
+		} 
+		.hatena-bookmark-button-frame {
+			margin-left: -32px;
+		}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="./jquery.autocomplete.js"></script>
+	<script type="text/javascript">
+// TODO
+// *blur
+// *add_kai
+// *remove_kai
+// *isExisted
+// *onAdd
+// *onRemove
+// *searchbox
+// *search
+//
+// *social button
+// English
+// subtitle
+// github
+// test
+// plugin
+
+$.fn.extend({
+	tagarea: function(options){
+		return new TagPlugin(this, options);
+	}
+});
+
+function TagPlugin(this_wrapper, options){
+//	console.log(this_obj, options);
+
+	this.tagwrapper = this_wrapper;
+	this.tagwrapper_id = this.tagwrapper.attr('id'); //ex) 'country'
+	this.tagwrapper_id_shp = '#' + this.tagwrapper.attr('id'); //ex) '#country'
+	this.tagwrapper_class = 'tagboxarea'; //ex) 'tagboxarea'
+	this.tagwrapper_class_dot = '.' + this.tagwrapper_class; //ex) '.tagboxarea'
+
+	this.tagbox_id = this.tagwrapper_id + '_tagbox'; //ex) 'country_tagbox'
+	this.tagbox_id_shp = '#' + this.tagbox_id; //ex) '#country_tagbox'
+	this.tagbox_class = 'tagbox'; //ex) 'tagbox'
+	this.tagbox_class_dot = '.' + this.tagbox_class; //ex) '.tagbox'
+
+	this.taginput_id = this.tagwrapper_id + '_taginput'; //ex) 'country_taginput'
+	this.taginput_id_shp = '#' + this.taginput_id; //ex) '#country_taginput'
+	this.taginput_class = 'taginput'; //ex) 'taginput'
+	this.taginput_class_dot = '.' + this.taginput_class; //ex) '.taginput'
+
+	this.taglistbox_id = this.tagwrapper_id + '_taglistbox'; //ex) 'country_taglistbox'
+	this.taglistbox_id_shp = '#' + this.taglistbox_id; //ex) '#country_taglistbox'
+	this.taglistbox_class = 'taglistbox'; //ex) 'taglistbox'
+	this.taglistbox_class_dot = '.' + this.taglistbox_class; //ex) '.taglistbox'
+
+	this.tag_class = 'tag';
+	this.tag_class_dot = '.' + this.tag_class;
+	this.cancel_tag = 'cancel_tag';
+	this.cancel_tag_dot = '.' + this.cancel_tag;
+
+	this.options = $.extend(true, {}, {
+		autocomplete_url: null,
+		placeholder_text: 'add a tag',
+		placeholder_color: '#666',
+		input_color: '#000',
+		onAddTag: null,
+		onRemoveTag: null,
+		onChangeTag: null
+	}, options);
+
+	this.init();
+}
+
+TagPlugin.prototype.init = function(){
+	var tagbox = this.renderTagbox();
+	var taginput = this.renderTaginput();
+	var taglistbox = this.renderTaglistbox();
+	$(this.tagwrapper_id_shp).append(tagbox).append(taginput).append(taglistbox);
+
+	$(this.taginput_id_shp).val($(this.taginput_id_shp).attr('data-placeholder'))
+		.css('color', this.options.placeholder_color)
+		.blur();
+
+	if(this.options.autocomplete_url != undefined){
+		var _taglistbox = this.taglistbox_id_shp;
+		var _tagclass = this.tag_class;
+		$(this.taglistbox_id_shp).autocomplete(this.options.autocomplete_url, {})
+			.trigger('search', function(data){
+				var list = JSON.parse(data);
+				for(var i=0; i < list.length ;i++){
+					$(_taglistbox).append($('<div>', {class: _tagclass}).text(list[i]));
+				}
+			});
+	}
+
+	this.addListeners();
+};
+
+TagPlugin.prototype.addListeners = function(){
+	var _this = this;
+
+	$(this.tagbox_id_shp).on('click', function(e){
+		$(_this.taginput_id_shp).focus();
+	});
+
+	$(this.taginput_id_shp).on('focus', function(e){
+		if($(this).val() == $(this).attr('data-placeholder')){
+			$(this).val('').css('color', _this.options.input_color);
+		}
+	}).on('blur', function(e){
+		var val = $.trim($(this).val()),
+			ph = $(this).attr('data-placeholder');
+		if(!!val && val != ph){
+			return true;
+		} else {
+			$(this).val(ph).css('color', _this.options.placeholder_color);
+			return true;
+		}
+		return false;
+	}).on('keyup', function(e){ //Enter Key Event
+		if(e.which == 13){
+			e.preventDefault();
+			var targetStr = $.trim($(this).val());
+			var targetObj = setTargetObj(_this, targetStr, null, null);
+			var boxObj = targetObj.getBoxObj();
+			if(boxObj){
+				_this.remove(targetObj);
+			} else {
+				_this.add(targetObj);
+			}
+
+			$(_this.taginput_id_shp).val('').focus();
+		} else {
+			var targetWord = $.trim($(this).val());
+			$(_this.taglistbox_id_shp + ' ' + _this.tag_class_dot).each(function(){
+				var _target = $(this);
+				_target.show();
+				var targetObj = setTargetObj(_this, null, null, _target);
+				if(targetObj.getTargetStr().indexOf(targetWord) < 0) _target.hide();
+			});
+		}
+//		return false;
+	});
+
+	$(this.tagbox_id_shp).on('click', this.cancel_tag_dot, function(e){
+		e.preventDefault();
+		var boxObj = $(this).parents(_this.tag_class_dot);
+		var targetObj = setTargetObj(_this, null, boxObj, null);
+		_this.remove(targetObj);
+	});
+
+	$(this.taglistbox_id_shp).on('click', this.tag_class_dot, function(){
+		var listObj = $(this);
+		var targetObj = setTargetObj(_this, null, null, listObj);
+		var boxObj = targetObj.getBoxObj();
+		if(boxObj){
+			_this.remove(targetObj);
+		} else {
+			_this.add(targetObj);
+		}
+	});
+};
+
+TagPlugin.prototype.renderTagarea = function(){
+	var obj = $('<div>', {id: this.tagbox_id, class: this.tagbox_class}).append(
+		$('<input>', {id: this.taginput_id, class: this.taginput_class, 'data-placeholder': this.options.placeholder_text})
+	);
+
+	return obj;
+};
+
+TagPlugin.prototype.renderTagbox = function(){
+	var obj = $('<div>', {id: this.tagbox_id, class: this.tagbox_class});
+	return obj;
+};
+
+TagPlugin.prototype.renderTaginput = function(){
+	var obj = $('<input>', {id: this.taginput_id, class: this.taginput_class, 'data-placeholder': this.options.placeholder_text})
+	return obj;
+};
+
+TagPlugin.prototype.renderTaglistbox = function(){
+	var obj = $('<div>', {id: this.taglistbox_id, class: this.taglistbox_class});
+	return obj;
+};
+
+TagPlugin.prototype.renderTag = function(str){
+	var obj = $('<span>', {class: this.tag_class}).append(
+//		$('<span>', {text: str + '&nbsp;&nbsp;'}),
+		$('<span>', {text: str}).append('&nbsp;&nbsp;'),
+		$('<a>', {href: '#', class: this.cancel_tag, text: 'x'})
+	);
+
+	return obj;
+};
+
+TagPlugin.prototype.add = function(targetObj){
+	var targetStr = targetObj.getTargetStr();
+	if(!targetStr) return false;
+	this.renderTag(targetStr).appendTo(this.tagbox_id_shp);
+
+	var _this = this;
+	if(this.options.onAddTag){
+		this.options.onAddTag.call(this, _this, targetObj);
+	}
+
+	if(this.options.onChangeTag){
+		this.options.onChangeTag.call(this, _this, targetObj);
+	}
+
+	return true;
+};
+
+TagPlugin.prototype.remove = function(targetObj){
+
+	targetObj.getBoxObj().remove();
+
+	var _this = this;
+	if(this.options.onRemoveTag){
+		this.options.onRemoveTag.call(this, _this, targetObj);
+	}
+
+	if(this.options.onChangeTag){
+		this.options.onChangeTag.call(this, _this, targetObj);
+	}
+
+	return true;
+};
+
+TagPlugin.prototype.inTagbox = function(str){
+	var rst = null;
+	$(this.tagbox_id_shp).find(this.tag_class_dot).each(function(){
+		var txt = $.trim($(this).text().replace('x', ''));
+		if(txt == str){ rst = $(this); return false; }
+	});
+
+	return rst;
+};
+
+TagPlugin.prototype.inTaglistbox = function(str){
+	var rst = null;
+	$(this.taglistbox_id_shp).find(this.tag_class_dot).each(function(){
+		var txt = $.trim($(this).text());
+		if(txt == str){ rst = $(this); return false; }
+	});
+
+	return rst;
+};
+
+function setTargetObj(tagareaObj, targetStr, boxObj, listObj){
+	return new TargetSet(tagareaObj, targetStr, boxObj, listObj);
+}
+
+function TargetSet(_tagarea, _target, _box, _list){
+	this.tagareaObj = _tagarea;
+	this.targetStr = _target;
+	this.boxObj = _box;
+	this.listObj = _list;
+}
+
+TargetSet.prototype.getTargetStr = function(){
+	if(this.targetStr) return this.targetStr;
+	if(this.boxObj) return $.trim(this.boxObj.text().replace('x', ''));
+	if(this.listObj) return this.listObj.text();
+	return false;
+};
+
+TargetSet.prototype.getBoxObj = function(){
+	if(this.boxObj) return this.boxObj;
+	if(this.targetStr) return this.tagareaObj.inTagbox(this.targetStr);
+	if(this.listObj) return this.tagareaObj.inTagbox($.trim(this.listObj.text()));
+
+	return false;
+};
+
+TargetSet.prototype.getListObj = function(){
+	if(this.listObj) return this.listObj;
+	if(this.targetStr) return this.tagareaObj.inTaglistbox(this.targetStr);
+	if(this.boxObj) return this.tagareaObj.inTaglistbox($.trim(this.boxObj.text().replace('x', '')));
+	return false;
+};
+
+		$(function(){
+var tagbox_1 = $('#country').tagarea({
+	autocomplete_url: './country.php',
+	onAddTag: function(tagareaObj, targetObj){ /* console.log('add', tagareaObj, targetObj); */ },
+	onRemoveTag: function(tagareaObj, targetObj){ /* console.log('remove', tagareaObj, targetObj); */ },
+	onChangeTag: function(tagareaObj, targetObj){
+//		console.log('change', tagareaObj, targetObj);
+		var listObj = targetObj.getListObj();
+		if(listObj) listObj.toggleClass('selected');
+	}
+});
+
+var tagbox_2 = $('#animal').tagarea({
+	autocomplete_url: './animal.php'
+});
+
+		});
+	</script>
+</head>
+<body>
+	<div id="container">
+		<div class="board header">
+			tagarea.js
+		</div>
+		<div class="board digest">
+			<div class="digest_area">
+				<h3>Dependency</h3>
+				<ul>
+					<li>jQuery</li>
+				</ul>
+			</div>
+			<div class="digest_area">
+				<h3>Features</h3>
+				<ul>
+					<li>Multiple implement</li>
+					<li>auto complete</li>
+				</ul>
+			</div>
+			<div class="digest_area">
+				<h3>Add a tag</h3>
+				<ul>
+					<li>Pressing an Enter</li>
+					<li>Blurring</li>
+					<li>Click ac-list</li>
+				</ul>
+				<h3>Delete a tag</h3>
+				<ul>
+					<li>Pressing a BS</li>
+					<li>Cancel Button</li>
+					<li>Click ac-list</li>
+				</ul>
+			</div>
+		</div>
+		<div class="board contents">
+			<div class="block"><div id="country" class="tagareabox"></div></div>
+			<div class="block"><div id="animal" class="tagareabox"></div></div>
+		</div>
+		<div class="board documents">
+			<h3>Github</h3>
+			https://github.com/Isotake
+			<h3>Demo</h3>
+			https://takehaya.jp/opus/tagarea/tagarea.html
+		</div>
+		<div class="board documents">
+			<h3>Minimal Setup</h3>
+			<pre>
+&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">&lt;/script>
+&lt;script src="./jquery.autocomplete.js">&lt;/script>
+&lt;script type="text/javascript">
+	$(function(){
+		var tagbox_1 = $('#country').tagarea({
+			autocomplete_url: './country.php'
+		});
+	});
+&lt;/script>
+			</pre>
+		</div>
+		<div class="board documents">
+			<h3>Licence</h3>
+This software is released under the MIT License, see License.txt.<br />
+https://github.com/Isotake
+		</div>
+		<div class="board footer">
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="bleubleut0214">Tweet</a>
+
+<div class="fb-like" data-href="https://takehaya.jp/opus/tagarea/tagarea.html" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+
+<div class="g-plusone" data-size="medium"></div>
+
+<a href="http://b.hatena.ne.jp/entry/https://takehaya.jp/opus/tagarea/tagarea.html" class="hatena-bookmark-button" data-hatena-bookmark-title="tagarea" data-hatena-bookmark-layout="simple-balloon" title="このエントリーをはてなブックマークに追加"><img src="https://b.hatena.ne.jp/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>
+		</div>
+	</div>
+</body>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script type="text/javascript" src="https://b.hatena.ne.jp/js/bookmark_button.js" charset="utf-8" async="async"></script>
+</html>
