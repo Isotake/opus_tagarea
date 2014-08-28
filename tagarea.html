@@ -141,7 +141,6 @@
 		}
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script src="./jquery.autocomplete.js"></script>
 	<script type="text/javascript">
 // TODO
 // *blur
@@ -152,11 +151,12 @@
 // *onRemove
 // *searchbox
 // *search
+// *autocomplete
 //
 // *social button
 // English
 // subtitle
-// github
+// *github
 // test
 // plugin
 
@@ -221,13 +221,17 @@ TagPlugin.prototype.init = function(){
 	if(this.options.autocomplete_url != undefined){
 		var _taglistbox = this.taglistbox_id_shp;
 		var _tagclass = this.tag_class;
-		$(this.taglistbox_id_shp).autocomplete(this.options.autocomplete_url, {})
-			.trigger('search', function(data){
+		var ajaxSetting = {
+			url: this.options.autocomplete_url,
+			cb_success: function(data){
+				console.log(data);
 				var list = JSON.parse(data);
 				for(var i=0; i < list.length ;i++){
 					$(_taglistbox).append($('<div>', {class: _tagclass}).text(list[i]));
 				}
-			});
+			}
+		};
+		this.getRecords(ajaxSetting);
 	}
 
 	this.addListeners();
@@ -384,6 +388,34 @@ TagPlugin.prototype.inTaglistbox = function(str){
 	return rst;
 };
 
+TagPlugin.prototype.getRecords = function(config){
+	if(!config.url){ console.log('error - no url'); return false; }
+	var _url = config.url;
+	var _datatype = (config.datatype) ? config.datatype : 'JSON' ;
+	var _data = (config.data) ? config.data : {} ;
+
+	var _param = {};
+	_param['beforesend'] = (config.cb_beforesend) ? config.cb_beforesend : function(data, status, xhr){} ;
+	_param['error'] = (config.cb_error) ? config.cb_error : function(xhr, status, errorThrown){ console.log('error status - ' + status); } ;
+	_param['success'] = (config.cb_success) ? config.cb_success : function(data, status, xhr){} ;
+	_param['complete'] = (config.cb_complete) ? config.cb_complete : function(data, status, xhr){} ;
+
+	requestByPost(_url, _data, _datatype, _param);
+
+	function requestByPost(url, data, datatype, param){
+		$.ajax({
+			url: url,
+			type: 'POST',
+			data: data,
+			datatype: datatype,
+			beforeSend: param['beforesend'],
+			error: param['error'],
+			success: param['success'],
+			complete: param['complete']
+		});
+	}
+};
+
 function setTargetObj(tagareaObj, targetStr, boxObj, listObj){
 	return new TargetSet(tagareaObj, targetStr, boxObj, listObj);
 }
@@ -476,7 +508,9 @@ var tagbox_2 = $('#animal').tagarea({
 		</div>
 		<div class="board documents">
 			<h3>Github</h3>
-<a href="https://github.com/Isotake/opus_tagarea">https://github.com/Isotake/opus_tagarea</a>
+			https://github.com/Isotake
+			<h3>Demo</h3>
+			https://takehaya.jp/opus/tagarea/tagarea.html
 		</div>
 		<div class="board documents">
 			<h3>Minimal Setup</h3>
@@ -494,8 +528,8 @@ var tagbox_2 = $('#animal').tagarea({
 		</div>
 		<div class="board documents">
 			<h3>Licence</h3>
-This software is released under the MIT License, see the following URL.<br />
-<a href="https://github.com/Isotake/opus_tagarea/blob/master/LICENCE.md">https://github.com/Isotake/opus_tagarea/blob/master/LICENCE.md</a>
+This software is released under the MIT License, see License.txt.<br />
+https://github.com/Isotake
 		</div>
 		<div class="board footer">
 <a href="https://twitter.com/share" class="twitter-share-button" data-via="bleubleut0214">Tweet</a>
