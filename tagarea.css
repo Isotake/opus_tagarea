@@ -1,0 +1,300 @@
+/* reset */
+html, body, div{
+	margin:0;
+	padding:0;
+}
+section, div {
+	-webkit-box-sizing: border-box;
+}
+img {
+	vertical-align: bottom;
+}
+button {
+	outline: none;
+}
+
+/* font */
+h2 {
+	margin: 0.98em 0;
+}
+body {
+	font: 16px/24px 'Monda', 'Meiryo', 'Hiragino Kaku Gothic Pro', 'MS PGothic', 'Arial', 'Verdana', 'Sans-Serif';
+	color: #000;
+}
+.setup pre {
+	font-family: 'Monda', 'Arial', 'Verdana', 'Sans-Serif';
+}
+
+/* link */
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+	color: #000;
+	text-decoration: underline;
+}
+
+/* main */
+html{
+	width: 100%;
+}
+body{
+	width: 100%;
+	background-image: url(./images/1-4-1.png);
+}
+#container {
+	margin: 0 auto 100px auto;
+	width: 1000px;
+}
+header {
+	margin: 30px 0px;
+	padding: 40px 15px;
+	border: 0;
+	background-color: #000;
+	display: -webkit-box;
+	display: box;
+}
+.header-left {
+	width: 40%;
+}
+.header-right {
+	width: 60%;
+	display: -webkit-box;
+	display: box;
+	-webkit-box-align: center;
+	box-align: center;
+	-webkit-box-pack: end;
+	box-pack: end;
+}
+.button-share,
+.button-contact {
+	margin: 0px 12px;
+	width: 60px;
+	height: 60px;
+	color: #000;
+	background-color: #fff;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+}
+.button-contact {
+	padding: 0 4px 0 0;
+}
+
+section {
+	width: 100%;
+	margin: 30px 0px;
+	padding: 0px 32px 40px 32px;
+	background: #fff;
+	border: solid 2px #000;
+}
+.features {
+	position: relative;
+}
+.ads {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 396px;
+	height: 100%;
+	display: -webkit-box;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+}
+.dummy_ads {
+	width: 300px;
+	height: 250px;
+	background: #ddd;
+}
+
+.digest {
+	display: -webkit-box;
+	-webkit-box-pack: center;
+}
+.digest_area {
+	width: 33%;
+}
+.features li,
+.digest_area li {
+	list-style-type: none;
+	position: relative;
+	line-height: 32px;
+}
+
+footer {
+	margin: 30px 0px;
+	padding: 20px 40px;
+	display: -webkit-box;
+	display: box;
+	-webkit-box-align: center;
+	box-align: center;
+	-webkit-box-pack: center;
+	box-pack: center;
+	background-color: #fff;
+	border: solid 2px #000;
+}
+
+/* tagarea */
+.block{
+	float: left;
+	margin: 20px;
+	width: 418px;
+	background-color: #fff;
+}
+.tagareabox {
+	width: 100%;
+	overflow: hidden;
+}
+.tagbox_wrapper {
+	width: 416px;
+	height: 220px;
+	padding-right: 20px;
+	overflow-y: scroll;
+	border: solid 3px #000;
+}
+.tagbox {
+	width: 390px;
+	height: 214px;
+}
+.taginput {
+	margin: 20px 0px;
+	padding: 0px 0px 0px 10px;
+	width: 400px;
+	height: 40px;
+	border: solid 3px #000;
+	background: #fff;
+	outline: 0px;
+	font-size: 16px;
+	font-weight: bold;
+}
+.taglistbox_wrapper {
+	width: 416px;
+	height: 440px;
+	padding-right: 20px;
+	border: solid 3px #000;
+	overflow-y: scroll;
+}
+.taglistbox {
+	width: 390px;
+	height: 434px;
+}
+.tag {
+	display: block;
+	float: left;
+	margin: 3px;
+	border-radius: 20px;
+}
+.tagbox .tag {
+	padding: 5px 10px 7px 10px;
+	font-size: 18px;
+	font-weight: bold;
+	color: #fff;
+	background-color: #000;
+}
+span .cancel_tag {
+	color: #fff;
+	text-decoration: none;
+}
+.taglistbox .tag {
+	padding: 4px 8px;
+	font-size: 16px;
+	font-weight: bold;
+	color: #000;
+	background-color: #fff;
+	cursor: pointer;
+}
+.taglistbox .tag.selected {
+	color: #000;
+	background-color: #fff;
+	text-decoration: line-through;
+}
+.taglistbox .tag.pointed {
+	color: #fff;
+	background-color: #000;
+}
+
+.tagbox_wrapper::-webkit-scrollbar,
+.taglistbox_wrapper::-webkit-scrollbar {
+	width: 20px;
+}
+.tagbox_wrapper::-webkit-scrollbar-track,
+.taglistbox_wrapper::-webkit-scrollbar-track {
+	background-color: #fff;
+}
+.tagbox_wrapper::-webkit-scrollbar-thumb,
+.taglistbox_wrapper::-webkit-scrollbar-thumb {
+	border: solid 3px #fff;
+	background-color: #000;
+}
+
+/* fontello */
+@font-face {
+	font-family: 'fontello';
+	src: url('./font/fontello_0214.eot');
+	src: url('./font/fontello_0214.eot?#iefix') format('embeded-opentype'),
+		 url('./font/fontello_0214.woff') format('woff'),
+		 url('./font/fontello_0214.ttf') format('truetype'),
+		 url('./font/fontello_0214.svg#fontello') format('svg');
+}
+
+.iconfont:before {
+	font-family: 'fontello';
+	font-style: normal;
+	font-weight: normal;
+	speak: none;
+	display: inline-block;
+}
+
+.button-share.button-twitter:before,
+.button-share.button-gplus:before,
+.button-share.button-facebook:before,
+.button-contact:before {
+	font-size: 28px;
+	line-height: 28px;
+}
+.button-share.button-twitter:before {
+	content: '\74';
+}
+.button-share.button-gplus:before {
+	content: '\67';
+}
+.button-share.button-facebook:before {
+	content: '\66';
+}
+.button-contact:before {
+	content: '\63';
+}
+
+a.extlink {
+	margin-left: 40px;
+	position: relative;
+}
+a.extlink:before {
+	content: '\65';
+	font-size: 24px;
+	line-height: 24px;
+	position: absolute;
+	top: 2px;
+	left: -32px;
+}
+
+.features li:before,
+.digest_area li:before {
+	content: '\62';
+	font-size: 24px;
+	line-height: 24px;
+	position: absolute;
+	top: 4px;
+	left: -32px;
+}
+
+/* general */
+.clearfix:after {
+	content: '.';
+	display: block;
+	clear: both;
+	height: 0;
+	visibility: hidden;
+}
+

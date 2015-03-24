@@ -1,0 +1,22 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="./tagarea.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('#country').tagarea({
+			taglist_url: './country.php'
+		});
+
+		$('#animal').tagarea({
+			taglist_url: './animal.php'
+		});
+	});
+</script>
+
+<div id="country" class="tagareabox">
+	<div class="pre-tag">["United States", "United Kingdom", "Japan"]</div>
+</div>
+
+<div id="animal" class="tagareabox">
+	<div class="pre-tag">["elefant"]</div>
+	<div class="pre-list">["panda","giraff","elefant", ... ,"zebra"]</div>
+</div>
