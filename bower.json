@@ -1,0 +1,22 @@
+{
+  "name": "tagarea",
+  "description": "A very simple tag-input plugin for jQuery",
+  "main": "tagarea.js",
+  "authors": [
+    "isotake"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "jquery-plugin"
+  ],
+  "homepage": "https://github.com/Isotake/opus_tagarea",
+  "moduleType": [
+    "amd",
+    "es6",
+    "globals",
+    "node"
+  ],
+  "dependencies": {
+    "jquery": "~1.8.3"
+  }
+}

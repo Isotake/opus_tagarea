@@ -1,3 +1,13 @@
+(function (factory){
+	if(typeof exports === 'object' && typeof module.exports === 'object'){
+		module.exports = factory(require('jquery'), window, document);
+	} else if(typeof define === 'function' && define.amd){
+		define(['jquery'], factory);
+	} else {
+		factory(jQuery, window, document);
+	}
+}(function($, window, document){
+
 /*!
  * tagarea.js - v1.00 (2014-08-31)
  *
@@ -6,7 +16,7 @@
  * @copyright 2014 Isotake
  * @licence MIT
  */
-;(function ($){
+(function ($, window, document){
 	$.fn.extend({
 		tagarea: function(options){
 			if(!$(this).length) return false;
@@ -364,4 +374,6 @@
 		return false;
 	};
 
-}(jQuery));
+}(jQuery, window, document));
+
+}));

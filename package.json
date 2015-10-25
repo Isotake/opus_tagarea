@@ -1,0 +1,25 @@
+{
+  "name": "tagarea",
+  "version": "1.0.2",
+  "description": "A very simple tag-input plugin for jQuery",
+  "main": "tagarea.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Isotake/opus_tagarea.git"
+  },
+  "keywords": [
+    "jquery-plugin"
+  ],
+  "author": "isotake",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Isotake/opus_tagarea/issues"
+  },
+  "homepage": "https://github.com/Isotake/opus_tagarea#readme",
+  "dependencies": {
+    "jquery": "^1.8.3"
+  }
+}
