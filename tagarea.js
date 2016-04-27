@@ -41,7 +41,6 @@
 		this.pre_tag_class = 'pre-tag';
 		this.pre_list_class = 'pre-list';
 		this.tag_class = 'tag';
-		this.point_class = 'pointed';
 		this.tag_name = 'tag_name';
 		this.cancel_tag = 'cancel_tag';
 
@@ -62,6 +61,8 @@
 			placeholder_text: '> tag',
 			placeholder_color: '#000',
 			input_color: '#000',
+			select_class: 'selected',
+			point_class: 'pointed',
 			onAddTag: null,
 			onRemoveTag: null,
 			onChangeTag: null
@@ -133,40 +134,40 @@
 		}).on('keyup', function(e){
 			if(e.which == 13){ //Enter Key Event
 				e.preventDefault();
-				if(!$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.point_class).length){
+				if(!$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.options.point_class).length){
 					var targetStr = $.trim($(this).val());
 					var targetObj = setTargetObj(_this, targetStr, null, null);
 				} else {
-					var listObj = $('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.point_class);
+					var listObj = $('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.options.point_class);
 					var targetObj = setTargetObj(_this, null, null, listObj);
 				}
 				var boxObj = targetObj.getBoxObj();
 				if(boxObj){
-					_this.remove(targetObj);
+					_this.removeTag(targetObj);
 				} else {
-					_this.add(targetObj);
+					_this.addTag(targetObj);
 				}
 
 				$('#'+_this.taginput_id).val('').focus();
 			} else if(e.which == 38){ //Up Key
-				if($('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.point_class).length){
-					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.point_class)
-						.removeClass(_this.point_class)
-						.prevAll('#'+_this.taglistbox_id + ' .tag:visible').first().addClass(_this.point_class);
+				if($('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.options.point_class).length){
+					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.options.point_class)
+						.removeClass(_this.options.point_class)
+						.prevAll('#'+_this.taglistbox_id + ' .tag:visible').first().addClass(_this.options.point_class);
 				} else {
-					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + ':visible').last().addClass(_this.point_class);
+					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + ':visible').last().addClass(_this.options.point_class);
 				}
 			} else if(e.which == 40){ //Down Key
-				if($('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.point_class).length){
-					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.point_class)
-						.removeClass(_this.point_class)
-						.nextAll('#'+_this.taglistbox_id + ' .tag:visible').first().addClass(_this.point_class);
+				if($('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.options.point_class).length){
+					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.options.point_class)
+						.removeClass(_this.options.point_class)
+						.nextAll('#'+_this.taglistbox_id + ' .tag:visible').first().addClass(_this.options.point_class);
 				} else {
-					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + ':visible').first().addClass(_this.point_class);
+					$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + ':visible').first().addClass(_this.options.point_class);
 				}
 			} else {
 				e.preventDefault();
-				$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.point_class).removeClass(_this.point_class);
+				$('#'+_this.taglistbox_id + ' ' + '.'+_this.tag_class + '.'+_this.options.point_class).removeClass(_this.options.point_class);
 
 				var targetWord = $.trim($(this).val());
 				$('#'+_this.taglistbox_id).trigger('listfilter', targetWord);
@@ -178,14 +179,14 @@
 			var boxObj = $(this).parents('.'+_this.tag_class);
 			var targetObj = setTargetObj(_this, null, boxObj, null);
 			var listObj = targetObj.getListObj();
-			_this.remove(targetObj);
+			_this.removeTag(targetObj);
 
 			$('#' + _this.taginput_id).val('').trigger('blur');
 		}).on('tagadd', function(e, arr){
 			for(var i=0; i<arr.length ; i++){
 				var targetStr = $.trim(arr[i]);
 				var targetObj = setTargetObj(_this, targetStr, null, null);
-				_this.add(targetObj);
+				_this.addTag(targetObj);
 			}
 		});
 
@@ -199,9 +200,9 @@
 			}
 
 			if(boxObj){
-				_this.remove(targetObj);
+				_this.removeTag(targetObj);
 			} else {
-				_this.add(targetObj);
+				_this.addTag(targetObj);
 			}
 		}).on('listadd', function(e, arr){
 			for(var i=0; i < arr.length ;i++){
@@ -246,43 +247,99 @@
 		return obj;
 	};
 
-	TagPlugin.prototype.add = function(targetObj){
+	TagPlugin.prototype.execute = function(val){
+		if(typeof val !== 'string'){
+			console.log('maybe not string in execute()');
+			return false;
+		}
+
+		var _str = $.trim(val);
+		if(!_str){
+			console.log('maybe empty string in execute()');
+			return false;
+		}
+
+		var targetObj = setTargetObj(this, _str, null, null);
+		if(this.inBox(_str)){
+			this.removeTag(targetObj);
+		} else {
+			this.addTag(targetObj);
+		}
+
+	};
+
+	TagPlugin.prototype.addTag = function(targetObj){
+		this.addToBox(targetObj);
+		this.addToList(targetObj);
+
+		$('#'+this.taglistbox_id).trigger('unfiltering');
+
+		var target_str = targetObj.getTargetStr();
+		if(this.options.onAddTag){
+			this.options.onAddTag.call(this, target_str);
+		}
+
+		if(this.options.onChangeTag){
+			this.options.onChangeTag.call(this, target_str);
+		}
+
+		return true;
+	};
+
+	TagPlugin.prototype.addToBox = function(targetObj){
 		var targetStr = targetObj.getTargetStr();
 		if(!targetStr) return false;
-		this.renderTag(targetStr).appendTo('#'+this.tagbox_id);
-
-		$('#'+this.taglistbox_id).trigger('unfiltering');
-
-		var _this = this;
-		if(this.options.onAddTag){
-			this.options.onAddTag.call(this, _this, targetObj);
-		}
-
-		if(this.options.onChangeTag){
-			this.options.onChangeTag.call(this, _this, targetObj);
-		}
-
-		return true;
+		var targetBoxObj = targetObj.getBoxObj();
+		if(!targetBoxObj) this.renderTag(targetStr).appendTo('#'+this.tagbox_id);
 	};
 
-	TagPlugin.prototype.remove = function(targetObj){
-		targetObj.getBoxObj().remove();
+	TagPlugin.prototype.addToList = function(targetObj){
+		var targetListObj = targetObj.getListObj();
+		if(targetListObj) targetListObj.addClass(this.options.select_class);
+	};
+
+	TagPlugin.prototype.removeTag = function(targetObj){
+		this.removeFromBox(targetObj);
+		this.removeFromList(targetObj);
 
 		$('#'+this.taglistbox_id).trigger('unfiltering');
 
-		var _this = this;
+		var target_str = targetObj.getTargetStr();
 		if(this.options.onRemoveTag){
-			this.options.onRemoveTag.call(this, _this, targetObj);
+			this.options.onRemoveTag.call(this, target_str);
 		}
 
 		if(this.options.onChangeTag){
-			this.options.onChangeTag.call(this, _this, targetObj);
+			this.options.onChangeTag.call(this, target_str);
 		}
-
-		return true;
 	};
 
-	TagPlugin.prototype.inTagbox = function(str){
+	TagPlugin.prototype.removeFromBox = function(targetObj){
+		var targetBoxObj = targetObj.getBoxObj();
+		if(targetBoxObj) targetBoxObj.remove();
+	};
+
+	TagPlugin.prototype.removeFromList = function(targetObj){
+		var targetListObj = targetObj.getListObj();
+		if(targetListObj) targetListObj.removeClass(this.options.select_class);
+	};
+
+	TagPlugin.prototype.inTagbox = function(val){
+		if(typeof val !== 'string'){
+			console.log('maybe not string in inTagbox');
+			return false;
+		}
+
+		var _str = $.trim(val);
+		if(!_str){
+			console.log('maybe empty string in inTagbox');
+			return false;
+		}
+
+		return Boolean(this.inBox(_str));
+	};
+
+	TagPlugin.prototype.inBox = function(str){
 		var rst = null;
 		$('#'+this.tagbox_id).find('.'+this.tag_name).each(function(){
 			var txt = $.trim($(this).text());
@@ -292,7 +349,22 @@
 		return rst;
 	};
 
-	TagPlugin.prototype.inTaglistbox = function(str){
+	TagPlugin.prototype.inTaglist = function(val){
+		if(typeof val !== 'string'){
+			console.log('maybe not string in inTagbox');
+			return false;
+		}
+
+		var _str = $.trim(val);
+		if(!_str){
+			console.log('maybe empty string in inTagbox');
+			return false;
+		}
+
+		return Boolean(this.inList(_str));
+	};
+
+	TagPlugin.prototype.inList = function(str){
 		var rst = null;
 		$('#'+this.taglistbox_id).find('.'+this.tag_class).each(function(){
 			var txt = $.trim($(this).text());
@@ -339,6 +411,10 @@
 		}
 	};
 
+	TagPlugin.prototype.setTarget = function(targetStr){
+		return new TargetSet(this, targetStr, null, null);
+	};
+
 	function setTargetObj(tagareaObj, targetStr, boxObj, listObj){
 		return new TargetSet(tagareaObj, targetStr, boxObj, listObj);
 	}
@@ -359,8 +435,8 @@
 
 	TargetSet.prototype.getBoxObj = function(){
 		if(this.boxObj) return this.boxObj;
-		if(this.targetStr) return this.tagareaObj.inTagbox(this.targetStr);
-		if(this.listObj) return this.tagareaObj.inTagbox($.trim(this.listObj.text()));
+		if(this.targetStr) return this.tagareaObj.inBox(this.targetStr);
+		if(this.listObj) return this.tagareaObj.inBox($.trim(this.listObj.text()));
 
 		return false;
 	};
@@ -368,9 +444,9 @@
 	TargetSet.prototype.getListObj = function(){
 		if(this.listObj) return this.listObj;
 		if(this.targetStr){
-			return this.tagareaObj.inTaglistbox(this.targetStr);
+			return this.tagareaObj.inList(this.targetStr);
 		}
-		if(this.boxObj) return this.tagareaObj.inTaglistbox($.trim(this.boxObj.find('.'+this.tagareaObj.tag_name).text()));
+		if(this.boxObj) return this.tagareaObj.inList($.trim(this.boxObj.find('.'+this.tagareaObj.tag_name).text()));
 		return false;
 	};
 
