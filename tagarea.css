@@ -3,8 +3,8 @@ html, body, div{
 	margin:0;
 	padding:0;
 }
-section, div {
-	-webkit-box-sizing: border-box;
+section, header, footer, div {
+	box-sizing: border-box;
 }
 img {
 	vertical-align: bottom;
@@ -21,7 +21,7 @@ body {
 	font: 16px/24px 'Monda', 'Meiryo', 'Hiragino Kaku Gothic Pro', 'MS PGothic', 'Arial', 'Verdana', 'Sans-Serif';
 	color: #000;
 }
-.setup pre {
+.setup code {
 	font-family: 'Monda', 'Arial', 'Verdana', 'Sans-Serif';
 }
 
@@ -50,21 +50,28 @@ body{
 header {
 	margin: 30px 0px;
 	padding: 40px 15px;
+	width: 100%;
 	border: 0;
 	background-color: #000;
 	display: -webkit-box;
+	display: -moz-box;
 	display: box;
 }
 .header-left {
 	width: 40%;
+	-moz-box-flex: 2;
 }
 .header-right {
 	width: 60%;
+	-moz-box-flex: 3;
 	display: -webkit-box;
+	display: -moz-box;
 	display: box;
 	-webkit-box-align: center;
+	-moz-box-align: center;
 	box-align: center;
 	-webkit-box-pack: end;
+	-moz-box-pack: end;
 	box-pack: end;
 }
 .button-share,
@@ -84,7 +91,7 @@ header {
 
 section {
 	width: 100%;
-	margin: 30px 0px;
+	margin: 0px 0px 30px 0px;
 	padding: 0px 32px 40px 32px;
 	background: #fff;
 	border: solid 2px #000;
@@ -98,9 +105,9 @@ section {
 	right: 0px;
 	width: 396px;
 	height: 100%;
-	display: -webkit-box;
-	-webkit-box-pack: center;
-	-webkit-box-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 .dummy_ads {
 	width: 300px;
@@ -110,10 +117,16 @@ section {
 
 .digest {
 	display: -webkit-box;
+	display: -moz-box;
+	display: box;
 	-webkit-box-pack: center;
+	-moz-box-pack: center;
+	box-pack: center;
+	width: 100%;
 }
 .digest_area {
 	width: 33%;
+	-moz-box-flex: 1;
 }
 .features li,
 .digest_area li {
@@ -121,15 +134,39 @@ section {
 	position: relative;
 	line-height: 32px;
 }
+ul.other_demos {
+	list-style-type: none;
+}
+ul.other_demos li {
+	display: inline-block;
+	margin-right: 40px;
+}
+.note {
+	padding-top: 2em;
+}
+
+.tables {
+	width: 100%;
+}
+.tables th, .tables td {
+	padding: 20px;
+	border: solid 1px #000;
+}
+.tables td {
+}
 
 footer {
-	margin: 30px 0px;
+	margin: 0px 0px 30px 0px;
 	padding: 20px 40px;
+	width: 100%;
 	display: -webkit-box;
+	display: -moz-box;
 	display: box;
 	-webkit-box-align: center;
+	-moz-box-align: center;
 	box-align: center;
 	-webkit-box-pack: center;
+	-moz-box-pack: center;
 	box-pack: center;
 	background-color: #fff;
 	border: solid 2px #000;

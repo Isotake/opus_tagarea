@@ -17,30 +17,23 @@
 	<meta property="og:image" content="http://takehaya.jp/opus/tagarea/images/screenshot.jpg" />
 
 	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Monda:400,700" />
-	<link rel="stylesheet" type="text/css" href="./tagarea.css" />
+	<link rel="stylesheet" type="text/css" href="./tagarea_1.css" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script type="text/javascript" src="./tagarea.js"></script>
+	<script type="text/javascript" src="./test/tagarea2.0.0.js"></script>
 	<script type="text/javascript">
 		$(function(){
 			$('#country').tagarea({
 				taglist_url: './country.php',
-				onAddTag: function(tagareaObj, targetObj){ /* console.log('add', tagareaObj, targetObj); */ },
-				onRemoveTag: function(tagareaObj, targetObj){ /* console.log('remove', tagareaObj, targetObj); */ },
-				onChangeTag: function(tagareaObj, targetObj){
-					var listObj = targetObj.getListObj();
-					if(listObj) listObj.toggleClass('selected');
-				}
+				onAddTag: function(tag_name){ /* console.log('add', tag_name); */ },
+				onRemoveTag: function(tag_name){ /* console.log('remove', tag_name); */ },
+				onChangeTag: function(tag_name){ console.log('change', tag_name); }
 			});
 
 			$('#animal').tagarea({
 //				taglist_url: './animal.php',
-				onAddTag: function(tagareaObj, targetObj){ /* console.log('add', tagareaObj, targetObj); */ },
-				onRemoveTag: function(tagareaObj, targetObj){ /* console.log('remove', tagareaObj, targetObj); */ },
-				onChangeTag: function(tagareaObj, targetObj){
-					var listObj = targetObj.getListObj();
-					if(listObj) listObj.toggleClass('selected');
-
-				}
+				onAddTag: function(tag_name){ /* console.log('add', tag_name); */ },
+				onRemoveTag: function(tag_name){ /* console.log('remove', tag_name); */ },
+				onChangeTag: function(tag_name){ console.log('change', tag_name); }
 			});
 		});
 	</script>
@@ -107,10 +100,61 @@
 -->
 				</div>
 			</div>
+			<div style="float: left; width: 100%; height: 80px;">&nbsp;</div>
+			<h2>Other demos</h2>
+				Also in these demos, This plugin are used.
+				<ul class="other_demos">
+					<li><a href="./test/demo02.html" class="iconfont extlink" target="_brank">demo - 2</a></li>
+					<li><a href="./test/demo03.html" class="iconfont extlink" target="_brank">demo - 3</a></li>
+					<li><a href="./test/demo06.html" class="iconfont extlink" target="_brank">demo - 6</a></li>
+					<li><a href="./test/demo04_2.html" class="iconfont extlink" target="_brank">demo - 4</a></li>
+					<li><a href="./test/demo05_1.html" class="iconfont extlink" target="_brank">demo - 5</a></li>
+				</ul>
+				Also on codepen, you can see the demo above.
+				<ul class="other_demos">
+					<li><a href="http://codepen.io/Isotake/full/bguyt" class="iconfont extlink" target="_brank">demo - 2</a></li>
+				</ul>
+		</section>
+		<section>
+			<h2>Browser Supported</h2>
+			<div class="digest">
+				<div class="digest_area">
+					<h4>MBP</h4>
+					<ul>
+						<li class="iconfont">Chrome</li>
+						<li class="iconfont">Firefox</li>
+						<li class="iconfont">Safari</li>
+					</ul>
+				</div>
+				<div class="digest_area">
+					<h4>Win10</h4>
+					<ul>
+						<li class="iconfont">Chrome</li>
+						<li class="iconfont">Firefox</li>
+						<li class="iconfont">Edge</li>
+					</ul>
+				</div>
+				<div class="digest_area">
+					<h4>iPad</h4>
+					<ul>
+						<li class="iconfont">Chrome</li>
+						<li class="iconfont">Firefox</li>
+						<li class="iconfont">Safari</li>
+					</ul>
+					<h4>Nexus 7</h4>
+					<ul>
+						<li class="iconfont">Chrome</li>
+						<li class="iconfont">Firefox</li>
+					</ul>
+				</div>
+			</div>
+			<div class="note">
+*1 On Firefox and Edge, scroll bar design is not under controll.
+			</div>
 		</section>
 		<section class="setup">
 			<h2>Minimal Setup</h2>
-			<pre>
+			<pre><code>
 &lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js">&lt;/script>
 &lt;script src="./tagarea.js">&lt;/script>
 &lt;script type="text/javascript">
@@ -131,36 +175,48 @@
 	&lt;div class="pre-tag">["elefant"]&lt;/div>
 	&lt;div class="pre-list">["panda","giraff","elefant", ... ,"zebra"]&lt;/div>
 &lt;/div>
-			</pre>
-		</section>
-		<section>
-			<h2>Browser Supported</h2>
-			<div class="digest">
-				<div class="digest_area">
-					<h4>MBP</h4>
+			</code></pre>
+			<h2>Main Options</h2>
+			<table id="options_table" class="tables"><tbody>
+				<tr><th width="25%">OPTION</th><th width="15%">DEFAULT</th><th width="60%">EXAMPLES</th></tr>
+				<tr><td>taglist_url</td><td>null</td><td>
 					<ul>
-						<li class="iconfont">Chrome</li>
-						<li class="iconfont">Safari</li>
+						<li>"./taglist.php"</li>
+						<li>"//example.com/taglist.php"</li>
 					</ul>
-				</div>
-				<div class="digest_area">
-					<h4>Win7</h4>
-					<ul>
-						<li class="iconfont">Chrome</li>
-					</ul>
-				</div>
-				<div class="digest_area">
-					<h4>iPad</h4>
-					<ul>
-						<li class="iconfont">Chrome</li>
-						<li class="iconfont">Safari</li>
-					</ul>
-					<h4>Nexus 7</h4>
-					<ul>
-						<li class="iconfont">Chrome</li>
-					</ul>
-				</div>
-			</div>
+				</td></tr>
+				<tr><td>onAddTag</td><td>null</td><td><pre><code>function(tag_name){
+	console.log('add', tag_name);
+}</code></pre>
+				</td></tr>
+				<tr><td>onRemoveTag</td><td>null</td><td><pre><code>function(tag_name){
+	console.log('remove', tag_name);
+}</code></pre>
+				</td></tr>
+				<tr><td>onChangeTag</td><td>null</td><td><pre><code>function(tag_name){
+	console.log('change', tag_name);
+}</code></pre>
+				</td></tr>
+			</tbody></table>
+			<h2>Main Methods</h2>
+			<table id="options_table" class="tables"><tbody>
+				<tr><th width="25%">METHOD</th><th width="75%">EXAMPLES</th></tr>
+				<tr><td>execute()</td><td>
+If this 'lion' tag is already selected, then the tag will be removed. If not, added.
+<pre><code>var tagareaObj = $('#animal').tagarea();
+tagareaObj.execute('lion');</code></pre>
+				</td></tr>
+				<tr><td>inTagbox()</td><td>
+If this 'lion' tag is already selected and in tagbox, return true.
+<pre><code>var tagareaObj = $('#animal').tagarea();
+tagareaObj.inTagbox('lion');</code></pre>
+				</td></tr>
+				<tr><td>inTaglist()</td><td>
+If this 'lion' tag is in the taglist of candidates, return true.
+<pre><code>var tagareaObj = $('#animal').tagarea();
+tagareaObj.inTaglist('lion');</code></pre>
+				</td></tr>
+			</tbody></table>
 		</section>
 		<section>
 			<h2>Github</h2>

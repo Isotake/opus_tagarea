@@ -1,0 +1,1089 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Language" content="ja">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<title>demo06.html - tagarea.js</title>
+	<link href='https://fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' type='text/css'>
+	<style type="text/css">
+		html, body, div, ul, li {
+			margin:0;
+			padding:0;
+		}
+		div, ul, li, input, nav {
+			box-sizing: border-box;
+		}
+		ul, li {
+			list-style: none;
+		}
+		a {
+			text-decoration: none;
+		}
+		a, a:hover, a:active, a:visited {
+			color: #000;
+		}
+		html, body {
+			width: 100%;
+		}
+		body, input{
+			font: 16px/24px 'Lato', Meiryo, 'Hiragino Kaku Gothic Pro','MS PGothic',Arial,Verdana,Sans-Serif;
+		}
+		body {
+			font-weight: 300;
+		}
+		input {
+			font-weight: 300;
+			font-weight: 400;
+		}
+
+/* clearfix */
+		.clearfix:after {
+			content: '';
+			display: block;
+			clear: both;
+		}
+
+
+/* main */
+		body {
+			background: #fefefe;
+		}
+		h4 {
+			margin-bottom: .6em;
+			padding: 2px 10px;
+			border-left: solid 4px #fff;
+			color: #fff;
+		}
+		header {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto;
+			width: 1000px;
+			font-weight: 100;
+			font-weight: 300;
+		}
+		.header {
+			padding: 20px 0;
+		}
+		.header_outer_left {
+			width: 30%;
+			text-align: left;
+		}
+		.header_left {
+			padding: 0;
+			width: 10%;
+			text-align: right;
+			font-size: 40px;
+		}
+		header .header_center {
+			width: 20%;
+			text-align: center;
+			font-size: 24px;
+		}
+		.header_right {
+			padding: 0;
+			width: 10%;
+			text-align: left;
+			font-size: 40px;
+		}
+		.header_outer_right {
+			width: 30%;
+			text-align: right;
+		}
+		header a.demo-link {
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+		.wrapper {
+			position: relative;
+			width: 100%;
+		}
+		.main-container {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 99;
+			width: 100%;
+			transition: all 0.5s;
+		}
+		.main-content {
+			position: relative;
+			margin: 0 auto 100px;
+			width: 1000px;
+		}
+		.card {
+			position: absolute;
+			width: 280px;
+			height: 400px;
+			border: solid 2px #000;
+			transition: all .4s ease-out;
+		}
+		.image {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 278px;
+		}
+		.title {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0 20px;
+			height: 118px;
+			border-top: solid 1px #000;
+			font-size: 2em;
+			text-transform: uppercase;
+		}
+		.animal_name {
+			position: relative;
+		}
+		.animal_name:before,
+		.animal_name:after {
+			position: absolute;
+			font-family: 'fontello';
+		}
+		.animal_name:before {
+			left: -36px;
+		}
+		.animal_name:after {
+			right: -36px;
+		}
+		.star .animal_name,
+		.fav .animal_name {
+			font-size: 0.8em;
+		}
+		.star .animal_name:before,
+		.star .animal_name:after {
+			content: '\f006';
+			content: '\f005';
+			top: 3px;
+			color: #FED443;
+			font-size: 26px;
+		}
+		.fav .animal_name:before,
+		.fav .animal_name:after {
+			content: '\f08a';
+			content: '\f004';
+			top: 4px;
+			color: #FE6D44;
+			font-size: 24px;
+		}
+		.card.grey .image {
+			background: #C2D5D8;
+		}
+		.card.green .image {
+			background: #88C5CC;
+		}
+		.card.pale_green .image {
+			background: #4AB8A1;
+		}
+		.card.aqua .image {
+			background: #B2E3FF;
+		}
+		.card.blue .image {
+			background: #B2E3FF;
+		}
+		.card.purple .image {
+			background: #2D4452;
+		}
+		.card.red .image {
+			background: #E65A2E;
+		}
+		.card.pink .image {
+			background: #E16B5A;
+		}
+		.card.yellow .image {
+			background: #F2CF61;
+		}
+		.menu {
+			position: absolute;
+			top: -95px;
+			left: 20px;
+			z-index: 100;
+			visibility: hidden;
+			padding: 20px;
+			width: 360px;
+			background: #fff;
+			transition: all 0.5s;
+			border-radius: 16px;
+		}
+		.about {
+			padding: 20px 0 0;
+			color: #FFF;
+			text-align: right;
+			font-size: 12px;
+			line-height: 16px;
+		}
+		.about a, .about a:hover, .about a:active, .about a:visited {
+			color: #FFF;
+		}
+
+/* morphing icon */
+		button {
+			position: relative;
+			width: 72px;
+			height: 72px;
+			border: none;
+			outline: none;
+			background: #000;
+			border-radius: 50%;
+			cursor: pointer;
+		}
+		.bar {
+			position: absolute;
+			top: 33.5px;
+			left: 20px;
+			width: 32px;
+			height: 5px;
+			background: #FFF;
+			border-radius: 6%/50%;
+		}
+		.hamburger .bar_1 {
+			transform: translateY(-10px);
+			animation: toHamburger_1 .4s linear;
+		}
+		.hamburger .bar_2 {
+			animation: toHamburger_2 .4s linear;
+		}
+		.hamburger .bar_3 {
+			transform: translateY(10px);
+			animation: toHamburger_3 .4s linear;
+		}
+		.cancel .bar_1 {
+			transform: rotate(-45deg);
+			animation: toCancel_1 .4s linear;
+		}
+		.cancel .bar_2 {
+			transform: rotate(-45deg);
+			animation: toCancel_2 .4s linear;
+		}
+		.cancel .bar_3 {
+			transform: rotate(45deg);
+			animation: toCancel_3 .4s linear;
+		}
+		.hamburger .bar_1,
+		.hamburger .bar_2,
+		.hamburger .bar_3,
+		.cancel .bar_1,
+		.cancel .bar_2,
+		.cancel .bar_3 {
+			-animation-duration: 4s;
+		}
+		@keyframes toHamburger_1 {
+			0% { transform: rotate(-45deg); }
+			10% { transform: rotate(0deg); }
+			50% { transform: rotate(0deg); }
+			100% { transform: translateY(-10px); }
+		}
+		@keyframes toHamburger_2 {
+			0% { transform: rotate(-45deg); }
+			10% { transform: rotate(0deg); }
+		}
+		@keyframes toHamburger_3 {
+			0% { transform: rotate(45deg); }
+			10% { transform: rotate(0deg); }
+			50% { transform: rotate(0deg); }
+			100% { transform: translateY(10px); }
+		}
+		@keyframes toCancel_1 {
+			0% { transform: translateY(-10px); }
+			10% { transform: translateY(0px); }
+			50% { transform: translateY(0px); }
+			100% { transform: rotate(-45deg); }
+		}
+		@keyframes toCancel_2 {
+			0% { transform: translateY(0px); }
+			10% { transform: translateY(0px); }
+			50% { transform: translateY(0px); }
+			100% { transform: rotate(-45deg); }
+		}
+		@keyframes toCancel_3 {
+			0% { transform: translateY(10px); }
+			10% { transform: translateY(0px); }
+			50% { transform: translateY(0px); }
+			100% { transform: rotate(45deg); }
+		}
+
+/* scale & rotate effect */
+		.wrapper {
+			perspective: 500px;
+			-perspective-origin: 0 50%;
+		}
+		.main-container {
+			transform-style: preserve-3d;
+		}
+		.menu-open .main-container {
+			transform: scale(.8);
+			transform-origin: 50% 0;
+		}
+		.menu {
+			opacity: 1;
+			transform: translate3d(-100%, 0, 0);
+		}
+		.menu-open .menu {
+			visibility: visible;
+			transition: transform 0.5s;
+			transform: translate3d(0, 0, 0);
+		}
+
+/* tagarea */
+		.tagareabox {
+			width: 100%;
+			height: 100%;
+		}
+		.tagbox_wrapper {
+			width: 100%;
+			border-radius: 8px;
+			background-color: #fff;
+		}
+		.tagbox {
+			width: 100%;
+			padding: 3px;
+		}
+		.taginput {
+			margin: 3px;
+			padding: 4px 0px 7px 10px;
+			border: 0;
+			border-radius: 6px;
+			background: #fff;
+			outline: 0px;
+			font-size: 14px;
+			line-height: 1em;
+		}
+		.taglistbox_wrapper {
+			margin-top: 20px;
+			width: 100%;
+			height: 100%;
+		}
+		#on .taglistbox_wrapper {
+			display: none;
+		}
+		.taglistbox {
+			padding: 12px 0 24px;
+			width: 100%;
+			height: 100%;
+		}
+		.tag {
+			display: block;
+			float: left;
+			margin: 3px;
+			border-radius: 6px;
+		}
+		.tagbox .tag {
+			padding: 7px 16px;
+			font-size: 14px;
+			line-height: 1;
+			color: #fff;
+			border-radius: 20px;
+			background-color: #C7D9A1;
+		}
+		span .cancel_tag {
+			position: relative;
+			color: transparent;
+			text-decoration: none;
+		}
+		span .cancel_tag:after {
+			content: '\f00d';
+			position: absolute;
+			top: 5px;
+			left: 0px;
+			width: 100%;
+			height: 100%;
+			font-family: 'fontello';
+			font-size: 10px;
+			color: #fff;
+		}
+		.taglistbox .tag {
+			float: left;
+			padding: 4px 10px;
+			font-size: 14px;
+			line-height: 1;
+			color: #fff;
+			cursor: pointer;
+		}
+		.taglistbox .tag.selected {
+			color: #000;
+			background-color: #fff;
+		}
+		.taglistbox .tag.pointed {
+			font-weight: bold;
+		}
+
+		.tagbox_wrapper::-webkit-scrollbar,
+		.taglistbox_wrapper::-webkit-scrollbar {
+			width: 20px;
+		}
+		.tagbox_wrapper::-webkit-scrollbar-track,
+		.taglistbox_wrapper::-webkit-scrollbar-track {
+			background-color: #fff;
+		}
+		.tagbox_wrapper::-webkit-scrollbar-thumb,
+		.taglistbox_wrapper::-webkit-scrollbar-thumb {
+			border: solid 3px #fff;
+			background-color: #000;
+		}
+
+/* color */
+		.menu {
+			background: #000;
+			-background: #C7D9A1;
+			-background: #EAB9AB;
+			-background: #A1D2E9;
+			-background: #EED8A1;
+		}
+		#on_tagbox .tag,
+		.taglistbox .tag.tag-on {
+			background: #4AB8A1;
+			-background: #C7D9A1;
+			-background: #EAB9AB;
+			-background: #A1D2E9;
+			-background: #EED8A1;
+		}
+		#off_tagbox .tag,
+		.taglistbox .tag.tag-off {
+			background: #E16B5A;
+			-background: #C7D9A1;
+			-background: #EAB9AB;
+			-background: #A1D2E9;
+			-background: #EED8A1;
+		}
+
+/* webfont */
+		@font-face {
+			font-family: 'fontello';
+			src: url('../font/fontello_0426.eot');
+			src: url('../font/fontello_0426.eot#iefix') format('embedded-opentype'),
+			url('../font/fontello_0426.woff2') format('woff2'),
+			url('../font/fontello_0426.woff') format('woff'),
+			url('../font/fontello_0426.ttf') format('truetype'),
+			url('../font/fontello_0426.svg#fontello') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+
+	</style>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js'></script>
+	<script src='./tagarea2.0.0.js'></script>
+	<script type="text/javascript">
+		$(function(){
+			$(window).on('scroll', _debounce(function(){
+				var scroll_y = $(this).scrollTop() - 95;
+				$('.menu').animate({'top': scroll_y + 'px'});
+			}, 300));
+
+			$('.card').on('positioning', function(){
+				$('.card:hidden').removeAttr('style');
+
+				$('.card:visible').each(function(idx){
+					var _top = Math.floor(idx/3) * 440 + 40;
+					var _left = (idx%3) * 320 + 40;
+					$(this).css({'top': _top + 'px', 'left': _left + 'px'});
+				});
+			});
+			$('.card').trigger('positioning');
+
+			$('button').on('click', function(){
+				var wrapper = $('#wrapper');
+				var button = $(this);
+				if(!wrapper.hasClass('menu-open')){
+					setTimeout(function(){
+						wrapper.addClass('menu-open');
+						button.removeClass('hamburger').addClass('cancel');
+						$(document).on('click', function(e){
+							var hasTouch = 'ontouchstart' in window;
+							var customEventTarget = (hasTouch) ? e.originalEvent.target : e.target ;
+							if(!$(customEventTarget).hasClass('menu') && $(customEventTarget).parents('.menu').length == 0){
+								// On clicking of cancel_tag, $(customEventTarget).parents('menu').length is 0.
+								// Because the clicked tag has already removed. 
+								if(!$(customEventTarget).hasClass('cancel_tag')){
+									wrapper.removeClass('menu-open');
+									button.removeClass('cancel').addClass('hamburger');
+									$(document).off('click');
+								}
+							}
+						});
+					}, 25);
+				}
+			});
+
+			var tagobj_on = $('#on').tagarea({
+				select_class: 'tag-on',
+				onAddTag: function(target_str){
+					var this_target = this.setTarget(target_str);
+					var listObj = this_target.getListObj();
+					if(listObj){
+						listObj.removeClass('tag-off');
+					}
+
+					if(tagobj_off){
+						var off_target = tagobj_off.setTarget(target_str);
+						if(off_target.getBoxObj()){
+							tagobj_off.removeTag(off_target);
+						}
+						if(off_target.getListObj()){
+							off_target.getListObj().addClass('tag-on');
+						}
+					}
+
+					$('div[data-tags="' + target_str + '"]').removeClass('fav').addClass('star');
+
+				},
+				onRemoveTag: function(target_str){
+					if(tagobj_off){
+						var off_target = tagobj_off.setTarget(target_str);
+						if(off_target.getListObj()){
+							off_target.getListObj().removeClass('tag-on');
+						}
+					}
+
+					$('div[data-tags="' + target_str + '"]').removeClass('star');
+
+				},
+				onChangeTag: function(target_str){
+					$('#on_tagbox').trigger('click');
+				}
+			});
+
+			var tagobj_off = $('#off').tagarea({
+				select_class: 'tag-off',
+				onAddTag: function(target_str){
+					var this_target = this.setTarget(target_str);
+					var listObj = this_target.getListObj();
+					if(listObj){
+						listObj.removeClass('tag-on');
+					}
+
+					if(tagobj_on){
+						var on_target = tagobj_on.setTarget(target_str);
+						if(on_target.getBoxObj()){
+							tagobj_on.removeTag(on_target);
+						}
+						if(on_target.getListObj()){
+							on_target.getListObj().addClass('tag-off');
+						}
+					}
+
+					$('div[data-tags="' + target_str + '"]').removeClass('star').addClass('fav');
+
+				},
+				onRemoveTag: function(target_str){
+					if(tagobj_on){
+						var on_target = tagobj_on.setTarget(target_str);
+						if(on_target.getListObj()){
+							on_target.getListObj().removeClass('tag-off');
+						}
+					}
+
+					$('div[data-tags="' + target_str + '"]').removeClass('fav');
+
+				},
+				onChangeTag: function(target_str){
+					$('#off_tagbox').trigger('click');
+				}
+			});
+
+			var tagon_pretag = tagobj_on.pre_tag;
+			for(var i=0, len=tagon_pretag.length; i<len ;i++){
+				var _str = tagon_pretag[i];
+				var _obj = tagobj_off.setTarget(_str);
+				if(_obj.getBoxObj()){
+					tagobj_off.remove(_obj);
+				}
+				if(_obj.getListObj()){
+					_obj.getListObj().removeClass('tag-off').addClass('tag-on');
+				}
+			}
+
+			$('#on_taglistbox').off('click');
+			$('#off_taglistbox').off('click').on('click', '.tag', function(e){
+				var target_str = $(this).text().trim();
+				var on_target = tagobj_on.setTarget(target_str);
+				var off_target = tagobj_off.setTarget(target_str);
+
+				var $self = $(this);
+				if($self.hasClass('tag-on')){
+					tagobj_off.addTag(off_target);
+				} else if($self.hasClass('tag-off')){
+					tagobj_off.removeTag(off_target);
+				} else {
+					tagobj_on.addTag(on_target);
+				}
+
+				if($('#on_taginput').val() != tagobj_on.options.placeholder_text){
+					$('#'+tagobj_on.taginput_id).val('').focus();
+				}
+			});
+
+			tagobj_on.taglistbox_id = tagobj_off.taglistbox_id;
+
+			$('.taginput').on('click', function(e){
+				e.stopPropagation();
+			});
+
+			$('#on_tagbox').on('click', function(){
+				$('#on_taginput').appendTo($(this)).focus();
+			});
+			$('#off_tagbox').on('click', function(){
+				$('#off_taginput').appendTo($(this)).focus();
+			});
+			$('#on_tagbox').trigger('click');
+			$('#off_tagbox').trigger('click');
+
+			$('button').trigger('click');
+
+		});
+
+		//	Based on Underscore.js 1.8.3
+		//	http://underscorejs.org
+		//	(c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+		//	Underscore may be freely distributed under the MIT license.
+
+		var _debounce = function(func, wait, immediate) {
+			var timeout, args, context, timestamp, result;
+
+			var later = function() {
+				var last = _now() - timestamp;
+
+				if (last < wait && last >= 0) {
+					timeout = setTimeout(later, wait - last);
+				} else {
+					timeout = null;
+					if (!immediate) {
+						result = func.apply(context, args);
+						if (!timeout) context = args = null;
+					}
+				}
+			};
+
+			var _now = Date.now || function(){
+				return new Date().getTime();
+			};
+
+			return function() {
+				context = this;
+				args = arguments;
+				timestamp = _now();
+				var callNow = immediate && !timeout;
+				if (!timeout) timeout = setTimeout(later, wait);
+				if (callNow) {
+					result = func.apply(context, args);
+					context = args = null;
+				}
+
+				return result;
+			};
+		};
+
+	</script>
+</head>
+<body>
+	<header>
+		<div class="header header_outer_left"></div>
+		<div class="header header_left"><a class="demo-link" href="./demo05.html">&lt;</a></div>
+		<div class="header header_center">DEMO</div>
+		<div class="header header_right"><a class="demo-link" href="./demo02.html">&gt;</a></a></div>
+		<div class="header header_outer_right">
+			<button class="hamburger">
+				<div class="bar bar_1"></div>
+				<div class="bar bar_2"></div>
+				<div class="bar bar_3"></div>
+			</button>
+		</div>
+	</header>
+	<div id="wrapper" class="wrapper">
+		<nav class="menu">
+<h4>My Stars</h4>
+			<div id="on" class="tagareabox">
+				<div class="pre-tag">["bat","bee"]</div>
+				<div class="pre-list">["bat","bear","bee","bird","bug","butterfly","camel","cat","cheetah","chicken","coala","cow","crocodile","dinosaur","dog","dolphin","dove","duck","eagle","elephant","fish","flamingo","fox","frog","giraffe","gorilla","horse","kangoroo","leopard","lion","monkey","mouse","panda","parrot","penguin","shark","sheep","snake","spider","squirrel","star-fish","tiger","turtle","wolf","zebra"]</div>
+			</div>
+
+<h4>My Favs</h4>
+			<div id="off" class="tagareabox">
+				<div class="pre-tag">["bear"]</div>
+				<div class="pre-list">["bat","bear","bee","bird","bug","butterfly","camel","cat","cheetah","chicken","coala","cow","crocodile","dinosaur","dog","dolphin","dove","duck","eagle","elephant","fish","flamingo","fox","frog","giraffe","gorilla","horse","kangoroo","leopard","lion","monkey","mouse","panda","parrot","penguin","shark","sheep","snake","spider","squirrel","star-fish","tiger","turtle","wolf","zebra"]</div>
+			</div>
+
+			<div class="about">
+This jQuery plugin >> <a href="//takehaya.jp/opus/tagarea/tagarea.html">tagarea.js</a><br />
+These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-animal-icons/" target="_brank">www.creativetail.com</a>
+			</div>
+		</nav>
+
+		<div class="main-container">
+			<style id="search_tag" type="text/css">
+/*
+				div.card { display: none; }
+				div.card[data-tags="bat"] { display: block; }
+*/
+			</style>
+			<div class="main-content">
+				<div class="card grey" data-tags="bat">
+					<div class="image">
+						<img src="./icons/bat_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">bat</span>
+					</div>
+				</div>
+				<div class="card green" data-tags="bear">
+					<div class="image">
+						<img src="./icons/bear_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">bear</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="bee">
+					<div class="image">
+						<img src="./icons/bee_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">bee</span>
+					</div>
+				</div>
+				<div class="card blue" data-tags="bird">
+					<div class="image">
+						<img src="./icons/bird_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">bird</span>
+					</div>
+				</div>
+				<div class="card green" data-tags="bug">
+					<div class="image">
+						<img src="./icons/bug_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">bug</span>
+					</div>
+				</div>
+				<div class="card pale_green" data-tags="butterfly">
+					<div class="image">
+						<img src="./icons/butterfly_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">butterfly</span>
+					</div>
+				</div>
+				<div class="card pale_green" data-tags="camel">
+					<div class="image">
+						<img src="./icons/camel_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">camel</span>
+					</div>
+				</div>
+				<div class="card red" data-tags="cat">
+					<div class="image">
+						<img src="./icons/cat_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">cat</span>
+					</div>
+				</div>
+				<div class="card pale_green" data-tags="cheetah">
+					<div class="image">
+						<img src="./icons/cheetah_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">cheetah</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="chicken">
+					<div class="image">
+						<img src="./icons/chicken_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">chicken</span>
+					</div>
+				</div>
+				<div class="card yellow" data-tags="coala">
+					<div class="image">
+						<img src="./icons/coala_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">coala</span>
+					</div>
+				</div>
+				<div class="card green" data-tags="cow">
+					<div class="image">
+						<img src="./icons/cow_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">cow</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="crocodile">
+					<div class="image">
+						<img src="./icons/crocodile_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">crocodile</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="dinosaur">
+					<div class="image">
+						<img src="./icons/dinosaur_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">dinosaur</span>
+					</div>
+				</div>
+				<div class="card yellow" data-tags="dog">
+					<div class="image">
+						<img src="./icons/dog_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">dog</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="dolphin">
+					<div class="image">
+						<img src="./icons/dolphin_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">dolphin</span>
+					</div>
+				</div>
+				<div class="card aqua" data-tags="dove">
+					<div class="image">
+						<img src="./icons/dove_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">dove</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="duck">
+					<div class="image">
+						<img src="./icons/duck_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">duck</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="eagle">
+					<div class="image">
+						<img src="./icons/eagle_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">eagle</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="elephant">
+					<div class="image">
+						<img src="./icons/elephant_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">elephant</span>
+					</div>
+				</div>
+				<div class="card yellow" data-tags="fish">
+					<div class="image">
+						<img src="./icons/fish_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">fish</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="flamingo">
+					<div class="image">
+						<img src="./icons/flamingo_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">flamingo</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="fox">
+					<div class="image">
+						<img src="./icons/fox_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">fox</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="frog">
+					<div class="image">
+						<img src="./icons/frog_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">frog</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="giraffe">
+					<div class="image">
+						<img src="./icons/giraffe_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">giraffe</span>
+					</div>
+				</div>
+				<div class="card pink" data-tags="gorilla">
+					<div class="image">
+						<img src="./icons/gorilla_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">gorilla</span>
+					</div>
+				</div>
+				<div class="card pale_green" data-tags="horse">
+					<div class="image">
+						<img src="./icons/horse_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">horse</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="kangoroo">
+					<div class="image">
+						<img src="./icons/kangoroo_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">kangoroo</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="leopard">
+					<div class="image">
+						<img src="./icons/leopard_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">leopard</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="lion">
+					<div class="image">
+						<img src="./icons/lion_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">lion</span>
+					</div>
+				</div>
+				<div class="card pink" data-tags="monkey">
+					<div class="image">
+						<img src="./icons/monkey_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">monkey</span>
+					</div>
+				</div>
+				<div class="card pink" data-tags="mouse">
+					<div class="image">
+						<img src="./icons/mouse_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">mouse</span>
+					</div>
+				</div>
+				<div class="card green" data-tags="panda">
+					<div class="image">
+						<img src="./icons/panda_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">panda</span>
+					</div>
+				</div>
+				<div class="card pink" data-tags="parrot">
+					<div class="image">
+						<img src="./icons/parrot_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">parrot</span>
+					</div>
+				</div>
+				<div class="card aqua" data-tags="penguin">
+					<div class="image">
+						<img src="./icons/penguin_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">penguin</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="shark">
+					<div class="image">
+						<img src="./icons/shark_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">shark</span>
+					</div>
+				</div>
+				<div class="card green" data-tags="sheep">
+					<div class="image">
+						<img src="./icons/sheep_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">sheep</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="snake">
+					<div class="image">
+						<img src="./icons/snake_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">snake</span>
+					</div>
+				</div>
+				<div class="card yellow" data-tags="spider">
+					<div class="image">
+						<img src="./icons/spider_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">spider</span>
+					</div>
+				</div>
+				<div class="card pale_green" data-tags="squirrel">
+					<div class="image">
+						<img src="./icons/squirrel_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">squirrel</span>
+					</div>
+				</div>
+				<div class="card purple" data-tags="star-fish">
+					<div class="image">
+						<img src="./icons/star-fish_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">star-fish</span>
+					</div>
+				</div>
+				<div class="card pink" data-tags="tiger">
+					<div class="image">
+						<img src="./icons/tiger_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">tiger</span>
+					</div>
+				</div>
+				<div class="card grey" data-tags="turtle">
+					<div class="image">
+						<img src="./icons/turtle_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">turtle</span>
+					</div>
+				</div>
+				<div class="card green" data-tags="wolf">
+					<div class="image">
+						<img src="./icons/wolf_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">wolf</span>
+					</div>
+				</div>
+				<div class="card green" data-tags="zebra">
+					<div class="image">
+						<img src="./icons/zebra_128px.png">
+					</div>
+					<div class="title">
+						<span class="animal_name">zebra</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> <!-- wrapper -->
+</body>
+</html>
