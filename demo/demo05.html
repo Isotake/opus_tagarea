@@ -96,6 +96,9 @@
 			position: relative;
 			width: 100%;
 		}
+		.wrapper.init {
+			display: none;
+		}
 		.main-container {
 			position: absolute;
 			top: 0;
@@ -115,6 +118,9 @@
 			height: 400px;
 			border: solid 2px #000;
 			transition: all .4s ease-out;
+		}
+		.card.hidden {
+			display: none;
 		}
 		.image {
 			display: flex;
@@ -420,14 +426,14 @@
 			}, 300));
 
 			$('.card').on('positioning', function(){
-				$('.card:hidden').removeAttr('style');
+				$('.card.hidden').removeAttr('style');
 
-				$('.card:visible').each(function(idx){
+				$('.card:not(.hidden)').each(function(idx){
 					var _top = Math.floor(idx/3) * 440 + 40;
 					var _left = (idx%3) * 320 + 40;
 					$(this).css({'top': _top + 'px', 'left': _left + 'px'});
 				});
-			}).trigger('positioning');
+			});
 
 			$('button').on('click', function(e){
 				var wrapper = $('#wrapper');
@@ -454,30 +460,18 @@
 			});
 
 			var tagobj = $('#animal').tagarea({
-				onAddTag: function(tag_name){ /* console.log('add', tag_name); */ },
-				onRemoveTag: function(tag_name){ /* console.log('remove', tag_name); */ },
+				onAddTag: function(tag_name){
+					/* console.log('add', tag_name); */
+					$('.card[data-tags="' + tag_name + '"]').removeClass('hidden');
+				},
+				onRemoveTag: function(tag_name){ 
+					/* console.log('remove', tag_name); */
+					$('.card[data-tags="' + tag_name + '"]').addClass('hidden');
+				},
 				onChangeTag: function(tag_name){
+					/* console.log('change', tag_name); */
 					$('.tagbox').trigger('click');
-
-					var tag_array = [];
-					$('#animal_tagbox .tag_name').each(function(itr){
-						var _tag = $(this).text().trim();
-						tag_array.push(_tag);
-					});
-					if(tag_array.length){
-						$('#search_tag').empty();
-						var _arr = [];
-						for(var i=0, len=tag_array.length; i<len; i++){
-							_arr.push('div.card[data-tags="' + tag_array[i] + '"]');
-						}
-						var _css = 'div.card{display:none;}';
-						_css+= _arr.join(',') + '{display: block;}';
-						$('#search_tag').prepend(_css);
-						$('.card').trigger('positioning');
-					} else {
-						$('#search_tag').empty();
-						$('.card').trigger('positioning');
-					}
+					$('.card').trigger('positioning');
 				}
 			});
 
@@ -490,6 +484,7 @@
 			});
 			$('.tagbox').trigger('click');
 
+			$('.wrapper').removeClass('init');
 			$('button').trigger('click');
 
 		});
@@ -551,7 +546,7 @@
 			</button>
 		</div>
 	</header>
-	<div id="wrapper" class="wrapper">
+	<div id="wrapper" class="wrapper init">
 		<nav class="menu">
 			<div id="animal" class="tagareabox">
 				<div class="pre-tag">["bat","bee","bug","camel","cheetah","coala","crocodile","dog","dove","eagle","fish","fox","giraffe","horse","leopard","monkey","panda","penguin","sheep","spider","star-fish","turtle","zebra"]</div>
@@ -565,14 +560,8 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 		</nav>
 
 		<div class="main-container">
-			<style id="search_tag" type="text/css">
-/*
-				div.card { display: none; }
-				div.card[data-tags="bat"] { display: block; }
-*/
-			</style>
 			<div class="main-content">
-				<div class="card grey" data-tags="bat">
+				<div class="card grey hidden" data-tags="bat">
 					<div class="image">
 						<img src="./icons/bat_128px.png">
 					</div>
@@ -580,7 +569,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">bat</span>
 					</div>
 				</div>
-				<div class="card green" data-tags="bear">
+				<div class="card green hidden" data-tags="bear">
 					<div class="image">
 						<img src="./icons/bear_128px.png">
 					</div>
@@ -588,7 +577,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">bear</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="bee">
+				<div class="card grey hidden" data-tags="bee">
 					<div class="image">
 						<img src="./icons/bee_128px.png">
 					</div>
@@ -596,7 +585,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">bee</span>
 					</div>
 				</div>
-				<div class="card blue" data-tags="bird">
+				<div class="card blue hidden" data-tags="bird">
 					<div class="image">
 						<img src="./icons/bird_128px.png">
 					</div>
@@ -604,7 +593,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">bird</span>
 					</div>
 				</div>
-				<div class="card green" data-tags="bug">
+				<div class="card green hidden" data-tags="bug">
 					<div class="image">
 						<img src="./icons/bug_128px.png">
 					</div>
@@ -612,7 +601,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">bug</span>
 					</div>
 				</div>
-				<div class="card pale_green" data-tags="butterfly">
+				<div class="card pale_green hidden" data-tags="butterfly">
 					<div class="image">
 						<img src="./icons/butterfly_128px.png">
 					</div>
@@ -620,7 +609,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">butterfly</span>
 					</div>
 				</div>
-				<div class="card pale_green" data-tags="camel">
+				<div class="card pale_green hidden" data-tags="camel">
 					<div class="image">
 						<img src="./icons/camel_128px.png">
 					</div>
@@ -628,7 +617,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">camel</span>
 					</div>
 				</div>
-				<div class="card red" data-tags="cat">
+				<div class="card red hidden" data-tags="cat">
 					<div class="image">
 						<img src="./icons/cat_128px.png">
 					</div>
@@ -636,7 +625,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">cat</span>
 					</div>
 				</div>
-				<div class="card pale_green" data-tags="cheetah">
+				<div class="card pale_green hidden" data-tags="cheetah">
 					<div class="image">
 						<img src="./icons/cheetah_128px.png">
 					</div>
@@ -644,7 +633,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">cheetah</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="chicken">
+				<div class="card grey hidden" data-tags="chicken">
 					<div class="image">
 						<img src="./icons/chicken_128px.png">
 					</div>
@@ -652,7 +641,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">chicken</span>
 					</div>
 				</div>
-				<div class="card yellow" data-tags="coala">
+				<div class="card yellow hidden" data-tags="coala">
 					<div class="image">
 						<img src="./icons/coala_128px.png">
 					</div>
@@ -660,7 +649,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">coala</span>
 					</div>
 				</div>
-				<div class="card green" data-tags="cow">
+				<div class="card green hidden" data-tags="cow">
 					<div class="image">
 						<img src="./icons/cow_128px.png">
 					</div>
@@ -668,7 +657,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">cow</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="crocodile">
+				<div class="card purple hidden" data-tags="crocodile">
 					<div class="image">
 						<img src="./icons/crocodile_128px.png">
 					</div>
@@ -676,7 +665,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">crocodile</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="dinosaur">
+				<div class="card purple hidden" data-tags="dinosaur">
 					<div class="image">
 						<img src="./icons/dinosaur_128px.png">
 					</div>
@@ -684,7 +673,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">dinosaur</span>
 					</div>
 				</div>
-				<div class="card yellow" data-tags="dog">
+				<div class="card yellow hidden" data-tags="dog">
 					<div class="image">
 						<img src="./icons/dog_128px.png">
 					</div>
@@ -692,7 +681,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">dog</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="dolphin">
+				<div class="card purple hidden" data-tags="dolphin">
 					<div class="image">
 						<img src="./icons/dolphin_128px.png">
 					</div>
@@ -700,7 +689,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">dolphin</span>
 					</div>
 				</div>
-				<div class="card aqua" data-tags="dove">
+				<div class="card aqua hidden" data-tags="dove">
 					<div class="image">
 						<img src="./icons/dove_128px.png">
 					</div>
@@ -708,7 +697,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">dove</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="duck">
+				<div class="card purple hidden" data-tags="duck">
 					<div class="image">
 						<img src="./icons/duck_128px.png">
 					</div>
@@ -716,7 +705,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">duck</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="eagle">
+				<div class="card purple hidden" data-tags="eagle">
 					<div class="image">
 						<img src="./icons/eagle_128px.png">
 					</div>
@@ -724,7 +713,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">eagle</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="elephant">
+				<div class="card purple hidden" data-tags="elephant">
 					<div class="image">
 						<img src="./icons/elephant_128px.png">
 					</div>
@@ -732,7 +721,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">elephant</span>
 					</div>
 				</div>
-				<div class="card yellow" data-tags="fish">
+				<div class="card yellow hidden" data-tags="fish">
 					<div class="image">
 						<img src="./icons/fish_128px.png">
 					</div>
@@ -740,7 +729,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">fish</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="flamingo">
+				<div class="card grey hidden" data-tags="flamingo">
 					<div class="image">
 						<img src="./icons/flamingo_128px.png">
 					</div>
@@ -748,7 +737,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">flamingo</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="fox">
+				<div class="card grey hidden" data-tags="fox">
 					<div class="image">
 						<img src="./icons/fox_128px.png">
 					</div>
@@ -756,7 +745,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">fox</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="frog">
+				<div class="card grey hidden" data-tags="frog">
 					<div class="image">
 						<img src="./icons/frog_128px.png">
 					</div>
@@ -764,7 +753,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">frog</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="giraffe">
+				<div class="card purple hidden" data-tags="giraffe">
 					<div class="image">
 						<img src="./icons/giraffe_128px.png">
 					</div>
@@ -772,7 +761,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">giraffe</span>
 					</div>
 				</div>
-				<div class="card pink" data-tags="gorilla">
+				<div class="card pink hidden" data-tags="gorilla">
 					<div class="image">
 						<img src="./icons/gorilla_128px.png">
 					</div>
@@ -780,7 +769,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">gorilla</span>
 					</div>
 				</div>
-				<div class="card pale_green" data-tags="horse">
+				<div class="card pale_green hidden" data-tags="horse">
 					<div class="image">
 						<img src="./icons/horse_128px.png">
 					</div>
@@ -788,7 +777,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">horse</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="kangoroo">
+				<div class="card grey hidden" data-tags="kangoroo">
 					<div class="image">
 						<img src="./icons/kangoroo_128px.png">
 					</div>
@@ -796,7 +785,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">kangoroo</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="leopard">
+				<div class="card purple hidden" data-tags="leopard">
 					<div class="image">
 						<img src="./icons/leopard_128px.png">
 					</div>
@@ -804,7 +793,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">leopard</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="lion">
+				<div class="card purple hidden" data-tags="lion">
 					<div class="image">
 						<img src="./icons/lion_128px.png">
 					</div>
@@ -812,7 +801,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">lion</span>
 					</div>
 				</div>
-				<div class="card pink" data-tags="monkey">
+				<div class="card pink hidden" data-tags="monkey">
 					<div class="image">
 						<img src="./icons/monkey_128px.png">
 					</div>
@@ -820,7 +809,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">monkey</span>
 					</div>
 				</div>
-				<div class="card pink" data-tags="mouse">
+				<div class="card pink hidden" data-tags="mouse">
 					<div class="image">
 						<img src="./icons/mouse_128px.png">
 					</div>
@@ -828,7 +817,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">mouse</span>
 					</div>
 				</div>
-				<div class="card green" data-tags="panda">
+				<div class="card green hidden" data-tags="panda">
 					<div class="image">
 						<img src="./icons/panda_128px.png">
 					</div>
@@ -836,7 +825,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">panda</span>
 					</div>
 				</div>
-				<div class="card pink" data-tags="parrot">
+				<div class="card pink hidden" data-tags="parrot">
 					<div class="image">
 						<img src="./icons/parrot_128px.png">
 					</div>
@@ -844,7 +833,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">parrot</span>
 					</div>
 				</div>
-				<div class="card aqua" data-tags="penguin">
+				<div class="card aqua hidden" data-tags="penguin">
 					<div class="image">
 						<img src="./icons/penguin_128px.png">
 					</div>
@@ -852,7 +841,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">penguin</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="shark">
+				<div class="card grey hidden" data-tags="shark">
 					<div class="image">
 						<img src="./icons/shark_128px.png">
 					</div>
@@ -860,7 +849,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">shark</span>
 					</div>
 				</div>
-				<div class="card green" data-tags="sheep">
+				<div class="card green hidden" data-tags="sheep">
 					<div class="image">
 						<img src="./icons/sheep_128px.png">
 					</div>
@@ -868,7 +857,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">sheep</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="snake">
+				<div class="card grey hidden" data-tags="snake">
 					<div class="image">
 						<img src="./icons/snake_128px.png">
 					</div>
@@ -876,7 +865,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">snake</span>
 					</div>
 				</div>
-				<div class="card yellow" data-tags="spider">
+				<div class="card yellow hidden" data-tags="spider">
 					<div class="image">
 						<img src="./icons/spider_128px.png">
 					</div>
@@ -884,7 +873,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">spider</span>
 					</div>
 				</div>
-				<div class="card pale_green" data-tags="squirrel">
+				<div class="card pale_green hidden" data-tags="squirrel">
 					<div class="image">
 						<img src="./icons/squirrel_128px.png">
 					</div>
@@ -892,7 +881,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">squirrel</span>
 					</div>
 				</div>
-				<div class="card purple" data-tags="star-fish">
+				<div class="card purple hidden" data-tags="star-fish">
 					<div class="image">
 						<img src="./icons/star-fish_128px.png">
 					</div>
@@ -900,7 +889,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">star-fish</span>
 					</div>
 				</div>
-				<div class="card pink" data-tags="tiger">
+				<div class="card pink hidden" data-tags="tiger">
 					<div class="image">
 						<img src="./icons/tiger_128px.png">
 					</div>
@@ -908,7 +897,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">tiger</span>
 					</div>
 				</div>
-				<div class="card grey" data-tags="turtle">
+				<div class="card grey hidden" data-tags="turtle">
 					<div class="image">
 						<img src="./icons/turtle_128px.png">
 					</div>
@@ -916,7 +905,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">turtle</span>
 					</div>
 				</div>
-				<div class="card green" data-tags="wolf">
+				<div class="card green hidden" data-tags="wolf">
 					<div class="image">
 						<img src="./icons/wolf_128px.png">
 					</div>
@@ -924,7 +913,7 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 						<span class="animal_name">wolf</span>
 					</div>
 				</div>
-				<div class="card green" data-tags="zebra">
+				<div class="card green hidden" data-tags="zebra">
 					<div class="image">
 						<img src="./icons/zebra_128px.png">
 					</div>

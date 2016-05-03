@@ -74,9 +74,9 @@ header {
 	-moz-box-pack: end;
 	box-pack: end;
 }
-.button-share,
-.button-contact {
+.button-share  {
 	margin: 0px 12px;
+	padding: 2px 0 0 0;
 	width: 60px;
 	height: 60px;
 	color: #000;
@@ -84,9 +84,6 @@ header {
 	border: none;
 	border-radius: 50%;
 	cursor: pointer;
-}
-.button-contact {
-	padding: 0 4px 0 0;
 }
 
 section {

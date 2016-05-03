@@ -9,11 +9,11 @@
 }(function($, window, document){
 
 /*!
- * tagarea.js - v1.00 (2014-08-31)
+ * tagarea.js - v2.00 (2016-04-27)
  *
  * @author Isotake
  * @url https://github.com/Isotake/opus_tagarea
- * @copyright 2014 Isotake
+ * @copyright 2016 Isotake
  * @licence MIT
  */
 (function ($, window, document){

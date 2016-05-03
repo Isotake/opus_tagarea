@@ -476,9 +476,7 @@
 			}, 300));
 
 			$('.card').on('positioning', function(){
-				$('.card:hidden').removeAttr('style');
-
-				$('.card:visible').each(function(idx){
+				$('.card').each(function(idx){
 					var _top = Math.floor(idx/3) * 440 + 40;
 					var _left = (idx%3) * 320 + 40;
 					$(this).css({'top': _top + 'px', 'left': _left + 'px'});
@@ -715,12 +713,6 @@ These cute animal icons >> <a href="https://www.creativetail.com/40-free-flat-an
 		</nav>
 
 		<div class="main-container">
-			<style id="search_tag" type="text/css">
-/*
-				div.card { display: none; }
-				div.card[data-tags="bat"] { display: block; }
-*/
-			</style>
 			<div class="main-content">
 				<div class="card grey" data-tags="bat">
 					<div class="image">
