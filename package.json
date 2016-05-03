@@ -1,6 +1,6 @@
 {
   "name": "tagarea",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A very simple tag-input plugin for jQuery",
   "main": "tagarea.js",
   "files": [
@@ -16,8 +16,8 @@
   },
   "keywords": [
     "jquery-plugin",
-	"tag",
-	"tags"
+    "tag",
+    "tags"
   ],
   "author": "isotake",
   "license": "MIT",
